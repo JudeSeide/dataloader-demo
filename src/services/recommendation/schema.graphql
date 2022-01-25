@@ -1,0 +1,19 @@
+scalar Cursor
+scalar JSON
+
+type ProductRecommendation @key(fields: "algorithmVersion") {
+    algorithmVersion: String!
+    ids: [ID!]
+}
+
+extend type Query {
+    similarProducts(
+        productId: ID!
+        algorithmVersion: String
+    ): ProductRecommendation
+
+    complementaryProducts(
+        productId: ID!
+        algorithmVersion: String
+    ): ProductRecommendation
+}
