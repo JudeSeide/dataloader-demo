@@ -1,4 +1,4 @@
-# Apollo Federation with dataloader demo
+# Apollo Federation Demo
 
 ## Usage
 
