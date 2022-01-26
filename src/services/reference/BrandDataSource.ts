@@ -7,7 +7,7 @@ export class BrandDataSource extends DataSource {
 
     constructor() {
         super();
-        this.loader = new DataLoader((keys: ReadonlyArray<string>) => brands.findAll(keys as string[], true));
+        this.loader = new DataLoader(async (keys: ReadonlyArray<string>) => brands.findAll(keys as string[], true));
     }
 
     public load = async (id: string): Promise<Brand | null> => this.loader.load(id);
