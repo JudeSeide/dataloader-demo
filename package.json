@@ -7,9 +7,9 @@
   "main": "src/index.ts",
   "scripts": {
     "start:services": "yarn start:reference & yarn start:recommendation & yarn start:product",
-    "start:reference": "ts-node-dev --files ./src/services/reference --respawn src/services/reference/index.ts",
-    "start:recommendation": "ts-node-dev --files ./src/services/recommendation --respawn src/services/recommendation/index.ts",
-    "start:product": "ts-node-dev --files ./src/services/product --respawn src/services/product/index.ts",
+    "start:reference": "ts-node-dev --clear --files ./src/services/reference --respawn src/services/reference/index.ts",
+    "start:recommendation": "ts-node-dev --clear --files ./src/services/recommendation --respawn src/services/recommendation/index.ts",
+    "start:product": "ts-node-dev --clear --files ./src/services/product --respawn src/services/product/index.ts",
     "start:gateway": "ts-node-dev --files ./src --respawn src/index.ts"
   },
   "dependencies": {
