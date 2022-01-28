@@ -106,8 +106,12 @@ export const products = {
         return data.find(product => product.id === id) || null;
     },
     findAll: async (ids?: string[], batched: boolean = false): Promise<(Product | null)[]> => {
-        console.log('\x1b[34m', 'Find all products with ids', ids);
-        if (isEmpty(ids)) return data;
+        if (isEmpty(ids)) {
+            console.log('\x1b[34m', 'Find all products');
+            return data;
+        }
+
+        console.log('\x1b[34m', `Find all products with ids ${JSON.stringify(ids)}`);
 
         if (batched) {
             return ids.map(id => data.find(product => product.id === id) ?? null);

@@ -41,8 +41,8 @@ extend type Category @key(fields: "id") {
     id: ID! @external
 }
 
-extend type ProductRecommendation @key(fields: "algorithmVersion") {
-    algorithmVersion: String! @external
+extend type ProductRecommendation @key(fields: "key") {
+    key: String! @external
     ids: [ID!] @external
     products(
         after: String

@@ -1,8 +1,8 @@
 scalar Cursor
 scalar JSON
 
-type ProductRecommendation @key(fields: "algorithmVersion") {
-    algorithmVersion: String!
+type ProductRecommendation @key(fields: "key") {
+    key: String!
     ids: [ID!]
 }
 

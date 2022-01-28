@@ -34,8 +34,12 @@ export const brands = {
         return data.find(brand => brand.id === id) || null;
     },
     findAll: async (ids?: string[], batched: boolean = false): Promise<(Brand | null)[]> => {
+        if (isEmpty(ids)) {
+            console.log('\x1b[32m', 'Find all brands');
+            return data;
+        }
+
         console.log('\x1b[32m', 'Find all brands with ids', ids);
-        if (isEmpty(ids)) return data;
 
         if (batched) {
             return ids.map(id => data.find(brand => brand.id === id) ?? null);

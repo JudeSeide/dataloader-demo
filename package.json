@@ -6,11 +6,11 @@
   "license": "MIT",
   "main": "src/index.ts",
   "scripts": {
-    "start": "yarn start:reference & yarn start:recommendation & yarn start:product & yarn start:gateway",
-    "start:reference": "ts-node-dev --watch ./src/services/reference --respawn src/services/reference/index.ts",
-    "start:recommendation": "ts-node-dev --watch ./src/services/recommendation --respawn src/services/recommendation/index.ts",
-    "start:product": "ts-node-dev --watch ./src/services/product --respawn src/services/product/index.ts",
-    "start:gateway": "ts-node-dev --watch ./src --respawn src/index.ts"
+    "start:services": "yarn start:reference & yarn start:recommendation & yarn start:product",
+    "start:reference": "ts-node-dev --files ./src/services/reference --respawn src/services/reference/index.ts",
+    "start:recommendation": "ts-node-dev --files ./src/services/recommendation --respawn src/services/recommendation/index.ts",
+    "start:product": "ts-node-dev --files ./src/services/product --respawn src/services/product/index.ts",
+    "start:gateway": "ts-node-dev --files ./src --respawn src/index.ts"
   },
   "dependencies": {
     "@apollo/federation": "^0.25.2",
@@ -24,8 +24,5 @@
     "lodash": "^4.17.21",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.5.5"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.15"
   }
 }

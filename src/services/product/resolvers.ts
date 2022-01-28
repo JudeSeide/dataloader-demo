@@ -47,11 +47,11 @@ export const resolvers = {
         // Without datasource
         products: (root: { ids?: string[] }, args: any) => {
             const where = isEmpty(args.where)
-                ? [{ id: { in: root.ids } }]
-                : [...args.where].map(clause => {
+                ? { id: { in: root.ids } }
+                : [args.where].map(clause => {
                     clause.id = { ...clause.id, in: clause.id?.in ? intersection(root.ids, clause.id.in) : root.ids };
                     return clause;
-                });
+                })[0];
 
             return connectedProductsResolver(root, { ...args, where });
         },
@@ -59,11 +59,11 @@ export const resolvers = {
         // // With datasource
         // products: async (root: { ids?: string[] }, args: any, ctx: Context) => {
         //     const where = isEmpty(args.where)
-        //         ? [{ id: { in: root.ids } }]
-        //         : [...args.where].map(clause => {
+        //         ? { id: { in: root.ids } }
+        //         : [args.where].map(clause => {
         //             clause.id = { ...clause.id, in: clause.id?.in ? intersection(root.ids, clause.id.in) : root.ids };
         //             return clause;
-        //         });
+        //         })[0];
         //
         //     return connectedProductsWithDataSourceResolver(root, { ...args, where }, ctx);
         // },
