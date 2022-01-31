@@ -1,5 +1,30 @@
 scalar Cursor
 
+input FilterInput {
+    id: KeywordFilterInput
+}
+
+input KeywordFilterInput {
+    in: [String!]
+}
+
+type PageInfo {
+    endCursor: String
+    startCursor: String
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+}
+
+type ProductConnection {
+    edges: [ProductEdge]
+    pageInfo: PageInfo!
+}
+
+type ProductEdge {
+    cursor: String!
+    node: Product
+}
+
 type Product @key(fields: "id") {
     id: ID!
     name: String
@@ -18,10 +43,22 @@ extend type Category @key(fields: "id") {
 extend type ProductRecommendation @key(fields: "key") {
     key: String! @external
     ids: [ID!] @external
-    products(ids: [ID!]): [Product!] @requires(fields: "ids")
+    products(
+        after: String
+        before: String
+        first: Int
+        last: Int
+        where: FilterInput
+    ): ProductConnection @requires(fields: "ids")
 }
 
 extend type Query {
     productById(id: ID!): Product
-    products(ids: [ID!]): [Product!]
+    products(
+        after: String
+        before: String
+        first: Int
+        last: Int
+        where: FilterInput
+    ): ProductConnection
 }
