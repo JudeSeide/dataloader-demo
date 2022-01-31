@@ -42,7 +42,7 @@ export const brands = {
         console.log('\x1b[32m', 'Find all brands with ids', ids);
 
         if (batched) {
-            return ids.map(id => data.find(brand => brand.id === id) ?? null);
+            return ids.map(id => data.find(brand => brand.id === id) || null);
         }
 
         return data.filter(brand => ids.includes(brand.id));

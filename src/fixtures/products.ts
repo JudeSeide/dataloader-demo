@@ -7,7 +7,7 @@ export type Product = {
     categoryId: string;
 };
 
-const data: Product[] = [
+export const data: Product[] = [
     {
         id: '1',
         name: 'Product 1',
@@ -114,7 +114,7 @@ export const products = {
         console.log('\x1b[34m', `Find all products with ids ${JSON.stringify(ids)}`);
 
         if (batched) {
-            return ids.map(id => data.find(product => product.id === id) ?? null);
+            return ids.map(id => data.find(product => product.id === id) || null);
         }
 
         return data.filter(product => ids.includes(product.id));

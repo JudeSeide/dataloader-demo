@@ -1,32 +1,10 @@
-type PageInfo {
-    endCursor: String
-    startCursor: String
-    hasNextPage: Boolean!
-    hasPreviousPage: Boolean!
-}
 
-type BrandConnection {
-    edges: [BrandEdge]
-    pageInfo: PageInfo!
-}
 
-type BrandEdge {
-    cursor: String!
-    node: Brand
-}
+scalar Cursor
+
 type Brand @key(fields: "id") {
     id: ID!
     name: String
-}
-
-type CategoryConnection {
-    edges: [CategoryEdge]
-    pageInfo: PageInfo!
-}
-
-type CategoryEdge {
-    cursor: String!
-    node: Category
 }
 
 type Category @key(fields: "id") {
@@ -36,20 +14,8 @@ type Category @key(fields: "id") {
 
 extend type Query {
     brandById(id: ID!): Brand
-    connectedBrands(
-        after: String
-        before: String
-        first: Int
-        ids: [ID!]
-        last: Int
-    ): BrandConnection
+    brands(ids: [ID!]): [Brand!]
 
     categoryById(id: ID!): Category
-    connectedCategories(
-        after: String
-        before: String
-        first: Int
-        ids: [ID!]
-        last: Int
-    ): CategoryConnection
+    categories(ids: [ID!]): [Category!]
 }

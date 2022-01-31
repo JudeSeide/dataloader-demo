@@ -42,7 +42,7 @@ export const categories = {
         console.log('\x1b[33m', 'Find all categories with ids', ids);
 
         if (batched) {
-            return ids.map(id => data.find(category => category.id === id) ?? null);
+            return ids.map(id => data.find(category => category.id === id) || null);
         }
 
         return data.filter(category => ids.includes(category.id));

@@ -1,11 +1,11 @@
-import { Product, products } from '../../fixtures/products';
+import { data } from '../../fixtures/products';
 
 const recommendedProducts = async (productId: string, type: string) => {
-    const data: Product[] = await products.findAll();
-
     const recommended = +productId % 2 === 0
         ? data.filter(product => +product.id % 2 === 0)
         : data.filter(product => +product.id % 2 !== 0);
+
+    console.log('\x1b[31m', `Find all ${type} products to productId ${productId}`);
 
     return {
         type,

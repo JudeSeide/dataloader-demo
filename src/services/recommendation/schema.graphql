@@ -1,5 +1,4 @@
 scalar Cursor
-scalar JSON
 
 type ProductRecommendation @key(fields: "key") {
     key: String!
