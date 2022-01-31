@@ -2,8 +2,7 @@ import { buildFederatedSchema } from '@apollo/federation';
 import { ApolloServer, gql } from 'apollo-server';
 import { readFileSync } from 'fs';
 import { resolvers } from './resolvers';
-import { ProductDataSource } from './ProductDataSource';
-import { InMemoryCache } from '../../cache/InMemoryCache';
+import { buildProductDataloader } from '../../fixtures/products';
 
 const schema = `${__dirname}/schema.graphql`;
 const typeDefs = gql`${readFileSync(schema, 'utf8')}`;
@@ -12,9 +11,10 @@ const server = new ApolloServer({
     schema: buildFederatedSchema([{ typeDefs, resolvers }]),
     tracing: true,
     introspection: true,
-    cache: new InMemoryCache(),
-    dataSources: () => ({
-        product: new ProductDataSource(),
+    context: () => ({
+        loaders: {
+            product: buildProductDataloader(),
+        }
     }),
 });
 

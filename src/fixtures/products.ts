@@ -1,4 +1,5 @@
 import { isEmpty } from 'lodash';
+import DataLoader from 'dataloader';
 
 export type Product = {
     id: string;
@@ -7,7 +8,7 @@ export type Product = {
     categoryId: string;
 };
 
-const data: Product[] = [
+export const data: Product[] = [
     {
         id: '1',
         name: 'Product 1',
@@ -105,18 +106,17 @@ export const products = {
         console.log('\x1b[34m', `Find product with id ${id}`);
         return data.find(product => product.id === id) || null;
     },
-    findAll: async (ids?: string[], batched: boolean = false): Promise<(Product | null)[]> => {
+    findAll: async (ids?: string[]): Promise<(Product | null)[]> => {
         if (isEmpty(ids)) {
             console.log('\x1b[34m', 'Find all products');
             return data;
         }
 
         console.log('\x1b[34m', `Find all products with ids ${JSON.stringify(ids)}`);
-
-        if (batched) {
-            return ids.map(id => data.find(product => product.id === id) ?? null);
-        }
-
-        return data.filter(product => ids.includes(product.id));
+        return ids.map(id => data.find(product => product.id === id) || null);
     },
 };
+
+export const buildProductDataloader = () => new DataLoader<string, Product | null>(
+    async (keys: ReadonlyArray<string>) => products.findAll(keys as string[]),
+);
