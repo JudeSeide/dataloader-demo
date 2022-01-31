@@ -10,7 +10,12 @@
     "start:reference": "ts-node-dev --clear --files ./src/services/reference --respawn src/services/reference/index.ts",
     "start:recommendation": "ts-node-dev --clear --files ./src/services/recommendation --respawn src/services/recommendation/index.ts",
     "start:product": "ts-node-dev --clear --files ./src/services/product --respawn src/services/product/index.ts",
-    "start:gateway": "ts-node-dev --files ./src --respawn src/index.ts"
+    "start:gateway": "ts-node-dev --files ./src --respawn src/index.ts",
+    "demo3": "git checkout demo_3 && yarn start:services",
+    "demo4": "git checkout demo_4 && yarn start:services",
+    "demo5": "git checkout demo_5 && yarn start:services",
+    "demo6": "git checkout demo_6 && yarn start:services",
+    "demo7": "git checkout demo_7 && yarn start:services"
   },
   "dependencies": {
     "@apollo/federation": "^0.25.2",
