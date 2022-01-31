@@ -34,17 +34,22 @@ export const brands = {
         console.log('\x1b[32m', `Find brand with id ${id}`);
         return data.find(brand => brand.id === id) || null;
     },
-    findAll: async (ids?: string[]): Promise<(Brand | null)[]> => {
+    findAll: async (ids?: string[], batched: boolean = false): Promise<(Brand | null)[]> => {
         if (isEmpty(ids)) {
             console.log('\x1b[32m', 'Find all brands');
             return data;
         }
 
         console.log('\x1b[32m', 'Find all brands with ids', ids);
-        return ids.map(id => data.find(brand => brand.id === id) || null);
+
+        if (batched) {
+            return ids.map(id => data.find(brand => brand.id === id) || null);
+        }
+
+        return data.filter(brand => ids.includes(brand.id));
     },
 };
 
 export const buildBrandDataloader = () => new DataLoader<string, Brand | null>(
-    async (keys: ReadonlyArray<string>) => brands.findAll(keys as string[]),
+    async (keys: ReadonlyArray<string>) => brands.findAll(keys as string[], true),
 );
