@@ -10,8 +10,8 @@ export class BrandDataSource extends DataSource {
         this.loader = new DataLoader(async (keys: ReadonlyArray<string>) => brands.findAll(keys as string[], true));
     }
 
-    public load = async (id: string): Promise<Brand | null> => this.loader.load(id);
+    public load = async (id: string): Promise<Brand | null> => brands.find(id); // this.loader.load(id);
 
     public loadMany = async (ids?: string[]): Promise<(Brand | Error | null)[]> =>
-        ids ? this.loader.loadMany(ids) : brands.findAll(ids);
+        brands.findAll(ids); // ids ? this.loader.loadMany(ids) : brands.findAll(ids);
 }

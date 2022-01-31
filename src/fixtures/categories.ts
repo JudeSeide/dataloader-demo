@@ -5,28 +5,10 @@ export type Category = {
     name: string;
 };
 
-export const data: Category[] = [
-    {
-        id: '1',
-        name: 'shoes'
-    },
-    {
-        id: '2',
-        name: 'clothes'
-    },
-    {
-        id: '3',
-        name: 'accessories'
-    },
-    {
-        id: '4',
-        name: 'bags'
-    },
-    {
-        id: '5',
-        name: 'everything-else'
-    }
-];
+export const data: Category[] = Array(1000).fill(0).map((_, i) => ({
+    id: `${i + 1}`,
+    name: `Category ${i + 1}`,
+}));
 
 export const categories = {
     find: async (id: string): Promise<Category | null> => {

@@ -5,28 +5,10 @@ export type Brand = {
     name: string;
 };
 
-export const data: Brand[] = [
-    {
-        id: '1',
-        name: 'Adidas',
-    },
-    {
-        id: '2',
-        name: 'Nike',
-    },
-    {
-        id: '3',
-        name: 'Puma',
-    },
-    {
-        id: '4',
-        name: 'Reebok',
-    },
-    {
-        id: '5',
-        name: 'Vans',
-    },
-];
+export const data: Brand[] = Array(1000).fill(0).map((_, i) => ({
+    id: `${i + 1}`,
+    name: `Brand ${i + 1}`,
+}));
 
 export const brands = {
     find: async (id: string): Promise<Brand | null> => {
