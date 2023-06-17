@@ -1,6 +1,4 @@
-
-
-scalar Cursor
+extend schema @link(url: "https://specs.apollo.dev/federation/v2.3", import: ["@key", "@requires", "@provides", "@external", "@tag", "@extends", "@shareable", "@inaccessible", "@override", "@interfaceObject"])
 
 type Brand @key(fields: "id") {
     id: ID!
@@ -12,10 +10,8 @@ type Category @key(fields: "id") {
     name: String
 }
 
-extend type Query {
-    brandById(id: ID!): Brand
-    brands(ids: [ID!]): [Brand!]
-
-    categoryById(id: ID!): Category
-    categories(ids: [ID!]): [Category!]
+type Tag @key(fields: "id") {
+    id: ID!
+    name: String
+    children: [Tag!]
 }

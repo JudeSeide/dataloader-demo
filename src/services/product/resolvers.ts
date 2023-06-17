@@ -1,7 +1,8 @@
-import { ProductDataSource } from './ProductDataSource';
 import { connectionFromArray } from 'graphql-relay';
-import { intersection, isEmpty } from 'lodash';
 import { Product } from '../../fixtures/products';
+import { Tag as BaseTag } from '../../fixtures/tags';
+
+import { ProductDataSource } from './ProductDataSource';
 
 interface Context {
     dataSources: {
@@ -9,24 +10,84 @@ interface Context {
     };
 }
 
+type Tag = BaseTag & {
+    productCount: number;
+};
+
+const aggregate = (products: Product[], field: keyof Omit<Product, 'tags'>) =>
+    Object.values(products.reduce((acc, hit) => {
+        const value = hit[field];
+
+        if (acc[value]) {
+            acc[value].productCount++;
+            return acc;
+        }
+
+        acc[value] = {
+            id: value,
+            productCount: 1,
+        };
+
+        return acc;
+    }, []));
+
+const aggregateTree = (products: Product[]): Partial<Tag>[] => {
+    const tagsMap: Map<string, Partial<Tag>> = new Map();
+
+    products.forEach((product) => {
+        product.tags.forEach((tag) => {
+            const { level0, level1 } = tag;
+
+            if (!tagsMap.has(level0)) {
+                tagsMap.set(level0, {
+                    id: level0,
+                    productCount: 1,
+                    children: [],
+                });
+            }
+
+            const currentTag = tagsMap.get(level0)!;
+            currentTag.productCount++;
+
+            if (level1 !== null) {
+                if (currentTag.children[level1]) {
+                    currentTag.children[level1].productCount++;
+                } else {
+                    currentTag.children[level1] = {
+                        id: level1,
+                        productCount: 1,
+                        children: [],
+                    };
+                }
+            }
+        });
+    });
+
+    return Array.from(tagsMap.values()).map((tag) => ({
+        ...tag,
+        children: Object.values(tag.children),
+    }));
+};
+
 const productsResolver = async (_: unknown, args: any, ctx: Context) => {
-    const count = args.first || args.last;
-    const maxAllowed = 10;
+    const hits = await ctx.dataSources.product.loadMany() as Product[];
 
-    if (count > maxAllowed) {
-        throw new Error(`Max number of products allowed is ${maxAllowed}`);
-    }
+    const brands = aggregate(hits, 'brandId');
+    const categories = aggregate(hits, 'categoryId');
 
-    const ids = args?.where?.id?.in;
-    const hits = await ctx.dataSources.product.loadMany(ids);
-
-    return connectionFromArray(hits, args);
+    return {
+        ...connectionFromArray(hits, args),
+        metadata: {
+            brands,
+            categories,
+            tags: aggregateTree(hits),
+        }
+    };
 };
 
 export const resolvers = {
     Query: {
         // With datasource
-        productById: async (_: unknown, { id }: { id: string }, ctx: Context) => ctx.dataSources.product.load(id),
         products: productsResolver,
     },
     Product: {
@@ -35,18 +96,5 @@ export const resolvers = {
 
         // With datasource
         __resolveReference: async (reference: any, ctx: Context) => ctx.dataSources.product.load(reference.id),
-    },
-    ProductRecommendation: {
-        // With datasource
-        products: async (root: { ids?: string[] }, args: any, ctx: Context) => {
-            const where = isEmpty(args.where)
-                ? { id: { in: root.ids } }
-                : [args.where].map(clause => {
-                    clause.id = { ...clause.id, in: clause.id?.in ? intersection(root.ids, clause.id.in) : root.ids };
-                    return clause;
-                })[0];
-
-            return productsResolver(root, { ...args, where }, ctx);
-        },
     }
 };

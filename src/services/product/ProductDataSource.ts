@@ -1,12 +1,11 @@
 import DataLoader from 'dataloader';
-import { DataSource } from 'apollo-datasource';
+
 import { Product, products } from '../../fixtures/products';
 
-export class ProductDataSource extends DataSource {
+export class ProductDataSource {
     private readonly loader: DataLoader<string, Product | null>;
 
     constructor() {
-        super();
         this.loader = new DataLoader(async (keys: ReadonlyArray<string>) => products.findAll(keys as string[], true));
     }
 

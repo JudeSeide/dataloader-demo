@@ -5,7 +5,7 @@ export type Brand = {
     name: string;
 };
 
-export const data: Brand[] = Array(1000).fill(0).map((_, i) => ({
+export const data: Brand[] = Array(100).fill(0).map((_, i) => ({
     id: `${i + 1}`,
     name: `Brand ${i + 1}`,
 }));

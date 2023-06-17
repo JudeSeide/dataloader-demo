@@ -5,7 +5,7 @@ export type Category = {
     name: string;
 };
 
-export const data: Category[] = Array(1000).fill(0).map((_, i) => ({
+export const data: Category[] = Array(10).fill(0).map((_, i) => ({
     id: `${i + 1}`,
     name: `Category ${i + 1}`,
 }));

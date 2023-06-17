@@ -1,33 +1,30 @@
 {
   "name": "federation-demo",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Examples of use cases for data-loaders",
   "author": "JudeSeide",
   "license": "MIT",
   "main": "src/index.ts",
   "scripts": {
-    "start:services": "yarn start:reference & yarn start:recommendation & yarn start:product",
+    "start:services": "yarn start:reference & yarn start:product",
     "start:reference": "ts-node-dev --clear --files ./src/services/reference --respawn src/services/reference/index.ts",
-    "start:recommendation": "ts-node-dev --clear --files ./src/services/recommendation --respawn src/services/recommendation/index.ts",
     "start:product": "ts-node-dev --clear --files ./src/services/product --respawn src/services/product/index.ts",
-    "start:gateway": "ts-node-dev --files ./src --respawn src/index.ts",
-    "demo3": "git checkout demo_3 && yarn start:services",
-    "demo4": "git checkout demo_4 && yarn start:services",
-    "demo5": "git checkout demo_5 && yarn start:services",
-    "demo6": "git checkout demo_6 && yarn start:services",
-    "demo7": "git checkout demo_7 && yarn start:services"
+    "start:gateway": "ts-node-dev --files ./src --respawn src/index.ts"
   },
   "dependencies": {
-    "@apollo/federation": "^0.25.2",
-    "@apollo/gateway": "^0.30.0",
-    "@types/lodash": "^4.14.178",
-    "apollo-datasource": "^3.3.1",
-    "apollo-server": "^2.25.1",
-    "dataloader": "^2.0.0",
-    "graphql": "^15.5.1",
+    "@apollo/gateway": "^2.4.8",
+    "@apollo/server": "^4.7.4",
+    "@apollo/subgraph": "^2.4.8",
+    "dataloader": "^2.2.2",
+    "graphql": "^16.6.0",
     "graphql-relay": "^0.10.0",
+    "graphql-tag": "^2.12.6",
     "lodash": "^4.17.21",
-    "ts-node-dev": "^1.1.8",
-    "typescript": "^4.5.5"
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.1.3"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.195",
+    "@types/node": "^20.3.1"
   }
 }

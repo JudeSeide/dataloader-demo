@@ -1,22 +1,16 @@
 import { BrandDataSource } from './BrandDataSource';
 import { CategoryDataSource } from './CategoryDataSource';
+import { TagDataSource } from './TagDataSource';
 
 interface Context {
     dataSources: {
         brand: BrandDataSource;
         category: CategoryDataSource;
+        tag: TagDataSource;
     };
 }
 
 export const resolvers = {
-    Query: {
-        // With datasource
-        brandById: async (_: unknown, { id }: { id: string }, ctx: Context) => ctx.dataSources.brand.load(id),
-        brands: async (_: unknown, { ids }: { ids?: string[] }, ctx: Context) => ctx.dataSources.brand.loadMany(ids),
-
-        categoryById: async (_: unknown, { id }: { id: string }, ctx: Context) => ctx.dataSources.category.load(id),
-        categories: async (_: unknown, { ids }: { ids?: string[] }, ctx: Context) => ctx.dataSources.category.loadMany(ids),
-    },
     Brand: {
         // With datasource
         __resolveReference: async (reference: any, ctx: Context) => ctx.dataSources.brand.load(reference.id),
@@ -24,5 +18,9 @@ export const resolvers = {
     Category: {
         // With datasource
         __resolveReference: async (reference: any, ctx: Context) => ctx.dataSources.category.load(reference.id),
+    },
+    Tag: {
+        // With datasource
+        __resolveReference: async (reference: any, ctx: Context) => ctx.dataSources.tag.load(reference.id),
     },
 };

@@ -1,11 +1,14 @@
-scalar Cursor
+extend schema @link(url: "https://specs.apollo.dev/federation/v2.3", import: ["@key", "@requires", "@provides", "@external", "@tag", "@extends", "@shareable", "@inaccessible", "@override", "@interfaceObject"])
 
-input FilterInput {
-    id: KeywordFilterInput
+type ProductConnection {
+    edges: [ProductEdge]
+    pageInfo: PageInfo!
+    metadata: ProductMetadata
 }
 
-input KeywordFilterInput {
-    in: [String!]
+type ProductEdge {
+    cursor: String!
+    node: Product
 }
 
 type PageInfo {
@@ -15,14 +18,10 @@ type PageInfo {
     hasPreviousPage: Boolean!
 }
 
-type ProductConnection {
-    edges: [ProductEdge]
-    pageInfo: PageInfo!
-}
-
-type ProductEdge {
-    cursor: String!
-    node: Product
+type ProductMetadata {
+    brands: [Brand!]
+    categories: [Category!]
+    tags: [Tag!]
 }
 
 type Product @key(fields: "id") {
@@ -32,33 +31,22 @@ type Product @key(fields: "id") {
     category: Category
 }
 
-extend type Brand @key(fields: "id") {
-    id: ID! @external
+type Brand @key(fields: "id") {
+    id: ID!
+    productCount: Int
 }
 
-extend type Category @key(fields: "id") {
-    id: ID! @external
+type Category @key(fields: "id") {
+    id: ID!
+    productCount: Int
 }
 
-extend type ProductRecommendation @key(fields: "key") {
-    key: String! @external
-    ids: [ID!] @external
-    products(
-        after: String
-        before: String
-        first: Int
-        last: Int
-        where: FilterInput
-    ): ProductConnection @requires(fields: "ids")
+type Tag @key(fields: "id") {
+    id: ID!
+    children: [Tag!] @override(from: "reference")
+    productCount: Int
 }
 
 extend type Query {
-    productById(id: ID!): Product
-    products(
-        after: String
-        before: String
-        first: Int
-        last: Int
-        where: FilterInput
-    ): ProductConnection
+    products: ProductConnection
 }
