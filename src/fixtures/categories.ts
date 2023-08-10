@@ -5,28 +5,10 @@ export type Category = {
     name: string;
 };
 
-export const data: Category[] = [
-    {
-        id: '1',
-        name: 'shoes'
-    },
-    {
-        id: '2',
-        name: 'clothes'
-    },
-    {
-        id: '3',
-        name: 'accessories'
-    },
-    {
-        id: '4',
-        name: 'bags'
-    },
-    {
-        id: '5',
-        name: 'everything-else'
-    }
-];
+export const data: Category[] = Array(10).fill(0).map((_, i) => ({
+    id: `${i + 1}`,
+    name: `Category ${i + 1}`,
+}));
 
 export const categories = {
     find: async (id: string): Promise<Category | null> => {
@@ -42,7 +24,7 @@ export const categories = {
         console.log('\x1b[33m', 'Find all categories with ids', ids);
 
         if (batched) {
-            return ids.map(id => data.find(category => category.id === id) ?? null);
+            return ids.map(id => data.find(category => category.id === id) || null);
         }
 
         return data.filter(category => ids.includes(category.id));

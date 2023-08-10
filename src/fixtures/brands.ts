@@ -5,28 +5,10 @@ export type Brand = {
     name: string;
 };
 
-export const data: Brand[] = [
-    {
-        id: '1',
-        name: 'Adidas',
-    },
-    {
-        id: '2',
-        name: 'Nike',
-    },
-    {
-        id: '3',
-        name: 'Puma',
-    },
-    {
-        id: '4',
-        name: 'Reebok',
-    },
-    {
-        id: '5',
-        name: 'Vans',
-    },
-];
+export const data: Brand[] = Array(100).fill(0).map((_, i) => ({
+    id: `${i + 1}`,
+    name: `Brand ${i + 1}`,
+}));
 
 export const brands = {
     find: async (id: string): Promise<Brand | null> => {
@@ -42,7 +24,7 @@ export const brands = {
         console.log('\x1b[32m', 'Find all brands with ids', ids);
 
         if (batched) {
-            return ids.map(id => data.find(brand => brand.id === id) ?? null);
+            return ids.map(id => data.find(brand => brand.id === id) || null);
         }
 
         return data.filter(brand => ids.includes(brand.id));

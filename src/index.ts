@@ -1,27 +1,28 @@
-import { ApolloGateway, } from '@apollo/gateway';
-import { ApolloServer } from 'apollo-server';
-import { GraphQLService } from 'apollo-server-core/src/types';
+import { ApolloGateway, IntrospectAndCompose } from '@apollo/gateway';
+import { ApolloServer } from '@apollo/server';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { startStandaloneServer } from '@apollo/server/standalone';
 
 const gateway = new ApolloGateway({
-    serviceList: [
-        { name: 'reference', url: 'http://localhost:4001' },
-        { name: 'recommendation', url: 'http://localhost:4002' },
-        { name: 'product', url: 'http://localhost:4003' },
-    ],
+    supergraphSdl: new IntrospectAndCompose({
+        subgraphs: [
+            { name: 'reference', url: 'http://localhost:4001' },
+            { name: 'product', url: 'http://localhost:4003' },
+        ],
+    }),
 });
 
 const server = new ApolloServer({
-    gateway: gateway as unknown as GraphQLService,
-    subscriptions: false,
-    tracing: true,
+    gateway,
+    cache: undefined,
     introspection: true,
-    cacheControl: {
-        defaultMaxAge: 1,
-        calculateHttpHeaders: false,
-    },
+    logger: console,
+    plugins: [
+        ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+    ]
 });
 
-server.listen(8080)
+startStandaloneServer(server, { listen: { port: 8080 } })
     .then(({ url }) => {
         console.log('\x1b[36m%s\x1b[0m', `🚀 Server ready at ${url}`);
     })
